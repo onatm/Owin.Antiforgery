@@ -1,0 +1,16 @@
+﻿<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <projectUrl>https://github.com/onatm/HttpMiddleware</projectUrl>
+    <licenseUrl>https://raw.github.com/onatm/HttpMiddleware/master/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <copyright>Copyright 2013</copyright>
+    <tags>owin http middleware http-middleware</tags>
+  </metadata>
+</package>
