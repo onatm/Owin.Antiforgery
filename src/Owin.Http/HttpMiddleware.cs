@@ -1,7 +1,7 @@
 ﻿using Microsoft.Owin;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace Owin.Http
@@ -13,34 +13,51 @@ namespace Owin.Http
         public HttpMiddleware(OwinMiddleware next, HttpMiddlewareOptions options)
             :base(next)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException("options");
+            }
+
             this.options = options;
         }
 
         public override async Task Invoke(IOwinContext context)
         {
-            //var owinRequestMethod = Get<string>(environment, "owin.RequestMethod");
-            //var owinRequestScheme = Get<string>(environment, "owin.RequestScheme");
-            var owinRequestHeaders = context.Request.Get<IDictionary<string, string[]>>("owin.RequestHeaders");
-            //var owinRequestPathBase = Get<string>(environment, "owin.RequestPathBase");
-            //var owinRequestPath = Get<string>(environment, "owin.RequestPath");
-            //var owinRequestQueryString = Get<string>(environment, "owin.RequestQueryString");
-            //var owinRequestBody = Get<Stream>(environment, "owin.RequestBody");
-            var owinRequestHost = GetHeader(owinRequestHeaders, "Host") ?? Dns.GetHostName();
-
-
-            if (!owinRequestHost.Contains(options.HostName))
+            if (context == null)
             {
-                context.Response.StatusCode = 403;
-                return;
+                throw new ArgumentNullException("context");
             }
 
-            await Next.Invoke(context);
-        }
+            context.Response.Headers.Add("Vary", new string[] { "Cookie" });
 
-        private static string GetHeader(IDictionary<string, string[]> headers, string key)
-        {
-            string[] value;
-            return headers.TryGetValue(key, out value) && value != null ? string.Join(",", value.ToArray()) : null;
+            string tokenCookie = context.Request.Cookies[options.CookieName];
+
+            var realToken = "";
+
+            if (string.IsNullOrEmpty(tokenCookie))
+                realToken = ""; // Generate token
+            else
+                realToken = tokenCookie;
+
+            // check realToken length
+
+            if (context.Request.IsSecure)
+            {
+                string referer = context.Request.Headers.Get("Referer");
+
+                if (string.IsNullOrEmpty(referer))
+                {
+                    context.Response.StatusCode = options.FailureCode;
+                    await context.Response.WriteAsync("A secure request contained no Referer or its value was malformed");
+
+                    return;
+                }
+            }
+
+            if (options.SafeMethods.Contains(context.Request.Method))
+                await Next.Invoke(context);
+
+            await Next.Invoke(context);
         }
     }
 }
