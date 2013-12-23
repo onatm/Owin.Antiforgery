@@ -1,4 +1,4 @@
-﻿namespace Owin.Http
+﻿namespace Owin.Antiforgery
 {
     public static class CsrfConstants
     {
@@ -13,12 +13,20 @@
         // Max-Age in seconds for the default base cookie. 365 days.
         public static readonly int MaxAge = 365 * 24 * 60 * 60;
 
+        public static readonly int TokenLength = 24;
+
         public static readonly string[] SafeMethods =
         {
             "GET",
             "HEAD",
             "OPTIONS",
             "TRACE"
+        };
+
+        public static readonly string[] SafeContentTypes = 
+        {
+            "application/x-www-form-urlencoded",
+            "multipart/form-data"
         };
     }
 }

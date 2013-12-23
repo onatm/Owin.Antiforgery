@@ -1,12 +1,12 @@
 ﻿using Owin;
 
-namespace Owin.Http.Samples
+namespace Owin.Antiforgery.Samples
 {
     public class Startup
     {
         public void Configuration(IAppBuilder app)
         {
-            app.UseHttpMiddleware();
+            app.UseAntiforgeryMiddleware();
             app.Run(context =>
             {
                 context.Response.ContentType = "text/plain";

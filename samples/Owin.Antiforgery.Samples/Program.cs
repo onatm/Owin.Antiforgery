@@ -1,7 +1,7 @@
 ﻿using Microsoft.Owin.Hosting;
 using System;
 
-namespace Owin.Http.Samples
+namespace Owin.Antiforgery.Samples
 {
     class Program
     {

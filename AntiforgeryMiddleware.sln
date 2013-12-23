@@ -5,15 +5,15 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D81A4A6B-0D65-4064-A096-2B02899999F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Owin.Http", "src\Owin.Http\Owin.Http.csproj", "{A708EB5F-396F-4CBF-BF78-CEC76978633F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Owin.Antiforgery", "src\Owin.Antiforgery\Owin.Antiforgery.csproj", "{A708EB5F-396F-4CBF-BF78-CEC76978633F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{B5AEEC6E-B150-40F6-857C-C9299A932809}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A454AE9D-2502-4365-BF6D-FF144D744E36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Owin.Http.Tests", "tests\Owin.Http.Tests\Owin.Http.Tests.csproj", "{2D0456AF-318A-4D14-971E-36B873E78581}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Owin.Antiforgery.Tests", "tests\Owin.Antiforgery.Tests\Owin.Antiforgery.Tests.csproj", "{2D0456AF-318A-4D14-971E-36B873E78581}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Owin.Http.Samples", "samples\Owin.Http.Samples\Owin.Http.Samples.csproj", "{0033231E-FA67-4A1D-84B5-494CA2E95D19}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Owin.Antiforgery.Samples", "samples\Owin.Antiforgery.Samples\Owin.Antiforgery.Samples.csproj", "{0033231E-FA67-4A1D-84B5-494CA2E95D19}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A1951B36-1677-4E29-BC7F-AE8655AF412B}"
 	ProjectSection(SolutionItems) = preProject
