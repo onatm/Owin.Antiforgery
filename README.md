@@ -1,4 +1,4 @@
-HttpMiddleware
+Owin.Antiforgery
 ==============
 
-Owin Http Middleware
+Owin Anti-forgery Middleware
