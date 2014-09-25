@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace Owin.Antiforgery
 {
-    public class AntiforgeryMiddleware: OwinMiddleware
+    public class AntiforgeryMiddleware : OwinMiddleware
     {
         private readonly AntiforgeryOptions options;
 
         public AntiforgeryMiddleware(OwinMiddleware next, AntiforgeryOptions options)
-            :base(next)
+            : base(next)
         {
             if (options == null)
             {
@@ -90,7 +90,7 @@ namespace Owin.Antiforgery
                 }
             }
 
-            if (sentToken.Length != realToken.Length)
+            if (sentToken.Length != realToken.Length || !realToken.Equals(sentToken))
             {
                 context.Response.StatusCode = options.FailureCode;
                 await context.Response.WriteAsync("The CSRF token in the cookie doesn't match the one received in a form/header.");

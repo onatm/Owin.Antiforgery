@@ -1,0 +1,25 @@
+﻿<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <projectUrl>https://github.com/onatm/Owin.Antiforgery</projectUrl>
+    <licenseUrl>https://raw.github.com/onatm/Owin.Antiforgery/master/license.txt</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <copyright>Copyright 2014</copyright>
+    <tags>owin anti-forgery middleware csrf</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="Microsoft.Owin" version="3.0.0" />
+        <dependency id="Owin" version="1.0" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\Owin.Antiforgery.dll" target="lib\net45\Owin.Antiforgery.dll" />
+  </files>
+</package>
