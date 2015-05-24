@@ -7,7 +7,7 @@ namespace Owin.Antiforgery
 {
     public class AntiforgeryMiddleware : OwinMiddleware
     {
-        private readonly AntiforgeryOptions options;
+        private readonly AntiforgeryOptions _options;
 
         public AntiforgeryMiddleware(OwinMiddleware next, AntiforgeryOptions options)
             : base(next)
@@ -17,7 +17,7 @@ namespace Owin.Antiforgery
                 throw new ArgumentNullException("options");
             }
 
-            this.options = options;
+            _options = options;
         }
 
         public override async Task Invoke(IOwinContext context)
@@ -27,21 +27,27 @@ namespace Owin.Antiforgery
                 throw new ArgumentNullException("context");
             }
 
-            context.Response.Headers.Add("Vary", new string[] { "Cookie" });
+            context.Response.Headers.Add("Vary", new[] { "Cookie" });
 
-            string tokenCookie = context.Request.Cookies[options.CookieName];
+            var tokenCookie = context.Request.Cookies[_options.CookieName];
 
-            string realToken = "";
+            string realToken;
 
             if (string.IsNullOrEmpty(tokenCookie))
+            {
                 realToken = RegenerateToken(context);
+            }
             else
+            {
                 realToken = tokenCookie;
+            }
 
             if (realToken.Length != CsrfConstants.TokenLength)
+            {
                 realToken = RegenerateToken(context);
+            }
 
-            if (options.SafeMethods.Contains(context.Request.Method))
+            if (_options.SafeMethods.Contains(context.Request.Method))
             {
                 await Next.Invoke(context);
                 return;
@@ -49,25 +55,25 @@ namespace Owin.Antiforgery
 
             if (context.Request.IsSecure)
             {
-                string referer = context.Request.Headers.Get("Referer");
+                var referer = context.Request.Headers.Get("Referer");
 
                 if (string.IsNullOrEmpty(referer))
                 {
-                    context.Response.StatusCode = options.FailureCode;
+                    context.Response.StatusCode = _options.FailureCode;
                     await context.Response.WriteAsync("A secure request contained no Referer or its value was malformed.");
 
                     return;
                 }
             }
 
-            string sentToken = context.Request.Headers.Get(options.HeaderName);
+            var sentToken = context.Request.Headers.Get(_options.HeaderName);
 
             if (string.IsNullOrEmpty(sentToken))
             {
-                if (options.SafeContentTypes.Contains(context.Request.ContentType))
+                if (_options.SafeContentTypes.Contains(context.Request.ContentType))
                 {
                     var form = await context.Request.ReadFormAsync();
-                    var fieldList = form.GetValues(options.FormFieldName);
+                    var fieldList = form.GetValues(_options.FormFieldName);
 
                     if (fieldList != null)
                     {
@@ -75,7 +81,7 @@ namespace Owin.Antiforgery
                     }
                     else
                     {
-                        context.Response.StatusCode = options.FailureCode;
+                        context.Response.StatusCode = _options.FailureCode;
                         await context.Response.WriteAsync("The CSRF token in the cookie doesn't match the one received in a form/header.");
 
                         return;
@@ -83,7 +89,7 @@ namespace Owin.Antiforgery
                 }
                 else
                 {
-                    context.Response.StatusCode = options.FailureCode;
+                    context.Response.StatusCode = _options.FailureCode;
                     await context.Response.WriteAsync("Forbidden content type.");
 
                     return;
@@ -92,7 +98,7 @@ namespace Owin.Antiforgery
 
             if (sentToken.Length != realToken.Length || !realToken.Equals(sentToken))
             {
-                context.Response.StatusCode = options.FailureCode;
+                context.Response.StatusCode = _options.FailureCode;
                 await context.Response.WriteAsync("The CSRF token in the cookie doesn't match the one received in a form/header.");
 
                 return;
@@ -108,9 +114,9 @@ namespace Owin.Antiforgery
 
         public string RegenerateToken(IOwinContext context)
         {
-            string token = GenerateToken();
+            var token = GenerateToken();
 
-            context.Response.Cookies.Append(options.CookieName, token);
+            context.Response.Cookies.Append(_options.CookieName, token);
 
             return token;
         }

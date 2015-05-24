@@ -1,6 +1,4 @@
-﻿using Owin;
-
-namespace Owin.Antiforgery.Samples
+﻿namespace Owin.Antiforgery.Samples
 {
     public class Startup
     {

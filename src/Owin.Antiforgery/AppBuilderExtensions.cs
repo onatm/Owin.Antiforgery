@@ -1,6 +1,4 @@
-﻿using Owin.Antiforgery;
-
-namespace Owin
+﻿namespace Owin.Antiforgery
 {
     public static class AppBuilderExtensions
     {

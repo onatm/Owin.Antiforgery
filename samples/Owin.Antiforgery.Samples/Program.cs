@@ -5,9 +5,9 @@ namespace Owin.Antiforgery.Samples
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            string uri = "http://localhost:8080/";
+            const string uri = "http://localhost:8080/";
 
             using (WebApp.Start<Startup>(uri))
             {
