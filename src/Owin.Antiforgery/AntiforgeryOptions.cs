@@ -20,6 +20,8 @@
 
         public string[] CsrfIgnoredUrls { get; set; }
 
+        public string[] WhitelistedIpAddresses { get; set; }
+
         public AntiforgeryOptions()
         {
             CookieName = CsrfConstants.CookieName;
@@ -31,6 +33,7 @@
             SafeContentTypes = CsrfConstants.SafeContentTypes;
             WhitelistedReferrerUrls = new string[0];
             CsrfIgnoredUrls = new string[0];
+            WhitelistedIpAddresses = new string[0];
         }
     }
 }

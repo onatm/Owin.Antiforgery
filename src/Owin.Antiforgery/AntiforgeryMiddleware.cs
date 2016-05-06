@@ -65,6 +65,12 @@ namespace Owin.Antiforgery
                 return;
             }
 
+            if (OptionsContainIp(context.Request))
+            {
+                await Next.Invoke(context);
+                return;
+            }
+
             if (context.Request.IsSecure)
             {
                 var referer = context.Request.Headers.Get("Referer");
@@ -122,6 +128,11 @@ namespace Owin.Antiforgery
         private bool OptionsContainIgnoredUrls(IOwinRequest request)
         {
             return _options.CsrfIgnoredUrls.Any(ignoredUrl => request.Uri.ToString().ToLowerInvariant().Contains(ignoredUrl.ToLowerInvariant()));
+        }
+
+        private bool OptionsContainIp(IOwinRequest request)
+        {
+            return _options.WhitelistedIpAddresses.Any(ignoredUrl => request.RemoteIpAddress.ToString().ToLowerInvariant().Contains(ignoredUrl.ToLowerInvariant()));
         }
 
         private bool OptionsContainReferrer(IOwinRequest request)
