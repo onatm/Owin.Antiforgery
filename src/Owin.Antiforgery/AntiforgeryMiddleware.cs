@@ -1,6 +1,8 @@
 ﻿using Microsoft.Owin;
 using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Owin.Antiforgery
@@ -100,6 +102,7 @@ namespace Owin.Antiforgery
                     else
                     {
                         context.Response.StatusCode = _options.FailureCode;
+                        Debug.WriteLine("empty form");
                         await context.Response.WriteAsync("The CSRF token in the cookie doesn't match the one received in a form/header.");
 
                         return;
@@ -117,7 +120,7 @@ namespace Owin.Antiforgery
             if (sentToken.Length != realToken.Length || !realToken.Equals(sentToken))
             {
                 context.Response.StatusCode = _options.FailureCode;
-                await context.Response.WriteAsync("The CSRF token in the cookie doesn't match the one received in a form/header.");
+                await context.Response.WriteAsync("The CSRF token in the cookie doesn't match the one received in a form/header");
 
                 return;
             }
@@ -149,7 +152,7 @@ namespace Owin.Antiforgery
 
         public string GenerateToken()
         {
-            return Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+            return System.Web.HttpServerUtility.UrlTokenEncode(Guid.NewGuid().ToByteArray());
         }
 
         public string RegenerateToken(IOwinContext context)
