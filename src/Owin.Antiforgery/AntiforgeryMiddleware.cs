@@ -53,6 +53,18 @@ namespace Owin.Antiforgery
                 return;
             }
 
+            if (OptionsContainIgnoredUrls(context.Request))
+            {
+                await Next.Invoke(context);
+                return;
+            }
+
+            if (OptionsContainReferrer(context.Request))
+            {
+                await Next.Invoke(context);
+                return;
+            }
+
             if (context.Request.IsSecure)
             {
                 var referer = context.Request.Headers.Get("Referer");
@@ -105,6 +117,23 @@ namespace Owin.Antiforgery
             }
 
             await Next.Invoke(context);
+        }
+
+        private bool OptionsContainIgnoredUrls(IOwinRequest request)
+        {
+            return _options.CsrfIgnoredUrls.Any(ignoredUrl => request.Uri.ToString().ToLowerInvariant().Contains(ignoredUrl.ToLowerInvariant()));
+        }
+
+        private bool OptionsContainReferrer(IOwinRequest request)
+        {
+            if (!request.Headers.ContainsKey("Referer"))
+            {
+                return false;
+            }
+
+            var referer = request.Headers.Get("Referer");
+
+            return _options.WhitelistedReferrerUrls.Any(whitelistedUrl => referer.ToLowerInvariant().Contains(whitelistedUrl.ToLowerInvariant()));
         }
 
         public string GenerateToken()

@@ -16,6 +16,10 @@
 
         public string[] SafeContentTypes { get; set; }
 
+        public string[] WhitelistedReferrerUrls { get; set; }
+
+        public string[] CsrfIgnoredUrls { get; set; }
+
         public AntiforgeryOptions()
         {
             CookieName = CsrfConstants.CookieName;
@@ -25,6 +29,8 @@
             MaxAge = CsrfConstants.MaxAge;
             SafeMethods = CsrfConstants.SafeMethods;
             SafeContentTypes = CsrfConstants.SafeContentTypes;
+            WhitelistedReferrerUrls = new string[0];
+            CsrfIgnoredUrls = new string[0];
         }
     }
 }
