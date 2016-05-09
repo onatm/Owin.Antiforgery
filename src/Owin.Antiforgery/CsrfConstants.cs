@@ -13,7 +13,7 @@
         // Max-Age in seconds for the default base cookie. 365 days.
         public static readonly int MaxAge = 365 * 24 * 60 * 60;
 
-        public static readonly int TokenLength = 24;
+        public static readonly int TokenLength = 23;
 
         public static readonly string[] SafeMethods =
         {

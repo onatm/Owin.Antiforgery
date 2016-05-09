@@ -53,6 +53,24 @@ namespace Owin.Antiforgery
                 return;
             }
 
+            if (OptionsContainIgnoredUrls(context.Request))
+            {
+                await Next.Invoke(context);
+                return;
+            }
+
+            if (OptionsContainReferrer(context.Request))
+            {
+                await Next.Invoke(context);
+                return;
+            }
+
+            if (OptionsContainIp(context.Request))
+            {
+                await Next.Invoke(context);
+                return;
+            }
+
             if (context.Request.IsSecure)
             {
                 var referer = context.Request.Headers.Get("Referer");
@@ -99,7 +117,7 @@ namespace Owin.Antiforgery
             if (sentToken.Length != realToken.Length || !realToken.Equals(sentToken))
             {
                 context.Response.StatusCode = _options.FailureCode;
-                await context.Response.WriteAsync("The CSRF token in the cookie doesn't match the one received in a form/header.");
+                await context.Response.WriteAsync("The CSRF token in the cookie doesn't match the one received in a form/header");
 
                 return;
             }
@@ -107,9 +125,31 @@ namespace Owin.Antiforgery
             await Next.Invoke(context);
         }
 
+        private bool OptionsContainIgnoredUrls(IOwinRequest request)
+        {
+            return _options.CsrfIgnoredUrls.Any(ignoredUrl => request.Uri.ToString().ToLowerInvariant().Contains(ignoredUrl.ToLowerInvariant()));
+        }
+
+        private bool OptionsContainIp(IOwinRequest request)
+        {
+            return _options.WhitelistedIpAddresses.Any(ignoredUrl => request.RemoteIpAddress.ToString().ToLowerInvariant().Contains(ignoredUrl.ToLowerInvariant()));
+        }
+
+        private bool OptionsContainReferrer(IOwinRequest request)
+        {
+            if (!request.Headers.ContainsKey("Referer"))
+            {
+                return false;
+            }
+
+            var referer = request.Headers.Get("Referer");
+
+            return _options.WhitelistedReferrerUrls.Any(whitelistedUrl => referer.ToLowerInvariant().Contains(whitelistedUrl.ToLowerInvariant()));
+        }
+
         public string GenerateToken()
         {
-            return Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+            return System.Web.HttpServerUtility.UrlTokenEncode(Guid.NewGuid().ToByteArray());
         }
 
         public string RegenerateToken(IOwinContext context)
